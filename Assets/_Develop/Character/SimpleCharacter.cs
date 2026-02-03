@@ -7,6 +7,7 @@ public class SimpleCharacter : MonoBehaviour, IDamageable, IDirectionalRotatable
     [SerializeField] private float _moveSpeed = 5;
     [SerializeField] private float _rotationSpeed = 900;
     [SerializeField] private int _maxHealth = 100;
+    [SerializeField] private Transform _cameraTarget;
 
     private bool _isDead = false;
 
@@ -16,12 +17,10 @@ public class SimpleCharacter : MonoBehaviour, IDamageable, IDirectionalRotatable
     private DirectionalMover _mover;
     private DirectionalRotator _rotator;
 
-    private Vector3 _targetDestination;
-
     public Vector3 CurrentVelocity => _mover.CurrentVelocity;
     public Quaternion CurrentRotation => _rotator.CurrentRotation;
 
-    public Vector3 CurrentTarget => _targetDestination;
+    public Transform CameraTarget => _cameraTarget;
     public Vector3 CurrentPosition => transform.position;
 
     private void Awake()
