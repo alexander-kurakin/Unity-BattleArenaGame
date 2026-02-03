@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class RandomAIDIrectionalMovableController : Controller
 {
-    private IDirectionMovable _movable;
+    private IDirectionalMovable _movable;
 
     private float _time;
     private float _timeToChangeDirection;
 
     private Vector3 _inputDirection;
 
-    public RandomAIDIrectionalMovableController(IDirectionMovable movable, float timeToChangeDirection)
+    public RandomAIDIrectionalMovableController(IDirectionalMovable movable, float timeToChangeDirection)
     {
         _movable = movable;
         _timeToChangeDirection = timeToChangeDirection;

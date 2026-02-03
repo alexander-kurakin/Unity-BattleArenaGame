@@ -40,18 +40,28 @@ public class SimpleCharacter : MonoBehaviour, IDamageable, IDirectionalRotatable
         _mover.Update(Time.deltaTime);
     }
 
-    public void SetMoveDirection(Vector3 inputDirection)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void SetRotationDirection(Vector3 inputDirection)
-    {
-        throw new System.NotImplementedException();
-    }
+    public void SetMoveDirection(Vector3 inputDirection) => _mover.SetInputDirection(inputDirection);
+    public void SetRotationDirection(Vector3 inputDirection) => _rotator.SetInputDirection(inputDirection);
 
     public void TakeDamage(int damage)
     {
-        throw new System.NotImplementedException();
+        if (damage < 0)
+        {
+            Debug.LogError(damage);
+            return;
+        }
+
+        _health.DecreaseHealth(damage);
+
+        if (_health.HealthIsDrained)
+        {
+            _isDead = true;
+            return;
+        }
     }
+
+    public int GetCurrentHealth() => _health.CurrentHealth;
+    public bool IsDead() => _isDead;
+    public bool CanMove => _isDead == false;
+
 }

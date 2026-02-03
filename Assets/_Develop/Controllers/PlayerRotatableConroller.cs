@@ -3,9 +3,9 @@ using UnityEngine;
 public class PlayerRotatableController : Controller
 {
     private IDirectionalRotatable _rotatable;
-    private INavMeshMovable _movable;
+    private IDirectionalMovable _movable;
 
-    public PlayerRotatableController(IDirectionalRotatable rotatable, INavMeshMovable movable)
+    public PlayerRotatableController(IDirectionalRotatable rotatable, IDirectionalMovable movable)
     {
         _rotatable = rotatable;
         _movable = movable;
