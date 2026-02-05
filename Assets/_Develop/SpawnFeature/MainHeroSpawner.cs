@@ -13,14 +13,9 @@ public class MainHeroSpawner : MonoBehaviour
     private Controller _heroController;
     private KeyboardInput _keyboardInput;
 
-    private void Awake()
+    public SimpleCharacter Spawn()
     {
-        Spawn(_spawnPoint.position);
-    }
-
-    private void Spawn(Vector3 position)
-    {
-        SimpleCharacter instance = Instantiate(_prefab, position, Quaternion.identity, null);
+        SimpleCharacter instance = Instantiate(_prefab, _spawnPoint.position, Quaternion.identity, null);
         _followCamera.Follow = instance.CameraTarget;
 
         _keyboardInput = new KeyboardInput();
@@ -31,6 +26,8 @@ public class MainHeroSpawner : MonoBehaviour
             );
 
         _heroController.Enable();
+
+        return instance;
     }
 
     private void Update()
