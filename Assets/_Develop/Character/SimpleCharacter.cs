@@ -23,7 +23,7 @@ public class SimpleCharacter : MonoBehaviour, IDamageable, IDirectionalRotatable
     public Transform CameraTarget => _cameraTarget;
     public Vector3 CurrentPosition => transform.position;
 
-    private void Awake()
+    public void Init()
     {
         _characterController = GetComponent<CharacterController>();
 
@@ -31,6 +31,9 @@ public class SimpleCharacter : MonoBehaviour, IDamageable, IDirectionalRotatable
         _rotator = new DirectionalRotator(transform, _rotationSpeed);
 
         _health = new Health(_maxHealth);
+
+        foreach (IInitializable initializable in GetComponentsInChildren<IInitializable>())
+            initializable.Init();
     }
 
     private void Update()

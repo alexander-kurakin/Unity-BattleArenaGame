@@ -16,6 +16,8 @@ public class MainHeroSpawner : MonoBehaviour
     public SimpleCharacter Spawn()
     {
         SimpleCharacter instance = Instantiate(_prefab, _spawnPoint.position, Quaternion.identity, null);
+        instance.Init();
+
         _followCamera.Follow = instance.CameraTarget;
 
         _keyboardInput = new KeyboardInput();

@@ -32,6 +32,8 @@ public class EnemiesSpawner : MonoBehaviour
 
             SimpleCharacter instance = Instantiate(_prefab, finalPosition, Quaternion.identity, null);
 
+            instance.Init();
+
             _enemyController = new CompositeController(
                 new RandomAIDIrectionalMovableController(
                     _spawnPoint.position,
