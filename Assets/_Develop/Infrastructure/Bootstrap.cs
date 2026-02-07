@@ -11,6 +11,8 @@ public class Bootstrap : MonoBehaviour
 
     [SerializeField] private KeyCode _keyToContinue = KeyCode.F;
 
+    private ControllersUpdateService _controllersUpdateService;
+
     private void Awake()
     {
         StartCoroutine(StartProcess());
@@ -20,6 +22,13 @@ public class Bootstrap : MonoBehaviour
     {
         _loadingScreen.Show();
         _loadingScreen.ShowMessage("Loading ...");
+
+        _controllersUpdateService = new ControllersUpdateService();
+
+        _mainHeroSpawner.Init(_controllersUpdateService);
+
+        foreach (EnemiesSpawner enemiesSpawner in _enemiesSpawners)
+            enemiesSpawner.Init(_controllersUpdateService);
 
         yield return new WaitForSeconds(1.5f);
 
@@ -36,6 +45,10 @@ public class Bootstrap : MonoBehaviour
         foreach (EnemiesSpawner enemiesSpawner in _enemiesSpawners)
             StartCoroutine(enemiesSpawner.Spawn());
 
+    }
 
+    private void Update()
+    {
+        _controllersUpdateService?.Update(Time.deltaTime);
     }
 }

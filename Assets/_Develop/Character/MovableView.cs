@@ -1,18 +1,19 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleCharacterView : MonoBehaviour
+public class MovableView : MonoBehaviour, IInitializable
 {
     private readonly int IsRunningKey = Animator.StringToHash("isRunning");
 
     [SerializeField] private Animator _animator;
-    [SerializeField] private SimpleCharacter _simpleCharacter;
+    private IMovable _movable;
+    private bool _isInit;
 
     private void Update()
     {
-        if (_simpleCharacter.CurrentVelocity.magnitude > 0.05f)
+        if (_isInit == false)
+            return;
+
+        if (_movable.CurrentVelocity.magnitude > 0.05f)
             StartRunning();
         else
             StopRunning();
@@ -26,5 +27,11 @@ public class SimpleCharacterView : MonoBehaviour
     private void StartRunning()
     {
         _animator.SetBool(IsRunningKey, true);
+    }
+
+    public void Init()
+    {
+        _movable = GetComponentInParent<IMovable>();
+        _isInit = true;
     }
 }

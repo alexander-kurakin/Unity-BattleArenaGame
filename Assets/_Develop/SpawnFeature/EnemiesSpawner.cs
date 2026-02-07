@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,11 +16,15 @@ public class EnemiesSpawner : MonoBehaviour
     [SerializeField] private float _leashRadius = 10f;
     [SerializeField] private float _returnLockDuration = 1f; 
 
-    private Controller _enemyController;
-    private List<Controller> _controllers = new();
-
     private int _currentEnemiesCount = 0;
-    
+
+    private ControllersUpdateService _controllersUpdateService;
+
+    public void Init(ControllersUpdateService controllersUpdateService)
+    {
+        _controllersUpdateService = controllersUpdateService;
+    }
+
     public IEnumerator Spawn()
     {
         while (_currentEnemiesCount <= _maxEnemiesCount)
@@ -31,10 +34,9 @@ public class EnemiesSpawner : MonoBehaviour
             Vector3 finalPosition = _spawnPoint.position + offset;
 
             SimpleCharacter instance = Instantiate(_prefab, finalPosition, Quaternion.identity, null);
-
             instance.Init();
 
-            _enemyController = new CompositeController(
+            Controller controller = new CompositeController(
                 new RandomAIDIrectionalMovableController(
                     _spawnPoint.position,
                     _timeToChangeDirection,
@@ -44,19 +46,13 @@ public class EnemiesSpawner : MonoBehaviour
                 new PlayerRotatableController(instance, instance)
                 );
 
-            _enemyController.Enable();
+            controller.Enable();
 
-            _controllers.Add(_enemyController);
+            _controllersUpdateService.Add( controller );
 
             _currentEnemiesCount++;
 
             yield return new WaitForSeconds(_spawnTimerValue);
         }
-    }
-
-    private void Update()
-    {
-        foreach(Controller controller in  _controllers)
-            controller.Update(Time.deltaTime);
     }
 }

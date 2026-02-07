@@ -1,10 +1,8 @@
 using UnityEngine;
 
-public interface IDirectionalMovable
+public interface IDirectionalMovable : ITransformPosition, IMovable
 {
-    Vector3 CurrentVelocity { get; }
-    Vector3 CurrentPosition { get; }
+    
     void SetMoveDirection(Vector3 inputDirection);
-
-    bool CanMove { get; }
+    
 }

@@ -12,6 +12,12 @@ public class MainHeroSpawner : MonoBehaviour
 
     private Controller _heroController;
     private KeyboardInput _keyboardInput;
+    private ControllersUpdateService _controllersUpdateService;
+
+    public void Init(ControllersUpdateService controllersUpdateService)
+    { 
+        _controllersUpdateService = controllersUpdateService;
+    }
 
     public SimpleCharacter Spawn()
     {
@@ -22,19 +28,19 @@ public class MainHeroSpawner : MonoBehaviour
 
         _keyboardInput = new KeyboardInput();
 
-        _heroController = new CompositeController(
+        Controller controller = new CompositeController(
             new PlayerDirectionalController(instance, _keyboardInput),
             new PlayerRotatableController(instance, instance)
             );
 
-        _heroController.Enable();
+        controller.Enable();
+        _controllersUpdateService.Add(controller);
 
         return instance;
     }
 
     private void Update()
     {
-        _heroController?.Update(Time.deltaTime);
         _keyboardInput?.Update(Time.deltaTime);
     }
 }
