@@ -348,14 +348,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13ff6b03165a9ee4cba542fa41adc56d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 6703345416262378604, guid: 3c0c8ea6a8ff99243b972f3cdd2ac83d, type: 3}
+  _enemyConfig: {fileID: 11400000, guid: c559b1ccb4572d840b2c41901a02e32e, type: 2}
   _spawnPoint: {fileID: 349095267}
   _spawnRadius: 10
   _spawnTimerValue: 2
   _maxEnemiesCount: 20
-  _timeToChangeDirection: 3
-  _leashRadius: 5
-  _returnLockDuration: 1
 --- !u!4 &253738209
 Transform:
   m_ObjectHideFlags: 0
@@ -862,14 +859,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13ff6b03165a9ee4cba542fa41adc56d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 6703345416262378604, guid: 3c0c8ea6a8ff99243b972f3cdd2ac83d, type: 3}
+  _enemyConfig: {fileID: 11400000, guid: c559b1ccb4572d840b2c41901a02e32e, type: 2}
   _spawnPoint: {fileID: 529975630}
   _spawnRadius: 7
   _spawnTimerValue: 2
   _maxEnemiesCount: 20
-  _timeToChangeDirection: 3
-  _leashRadius: 7
-  _returnLockDuration: 1
 --- !u!4 &426974756
 Transform:
   m_ObjectHideFlags: 0
@@ -1223,14 +1217,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13ff6b03165a9ee4cba542fa41adc56d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 6703345416262378604, guid: 3c0c8ea6a8ff99243b972f3cdd2ac83d, type: 3}
+  _enemyConfig: {fileID: 11400000, guid: c559b1ccb4572d840b2c41901a02e32e, type: 2}
   _spawnPoint: {fileID: 2085755316}
   _spawnRadius: 10
   _spawnTimerValue: 3
   _maxEnemiesCount: 20
-  _timeToChangeDirection: 2
-  _leashRadius: 10
-  _returnLockDuration: 1
 --- !u!1 &1175914622
 GameObject:
   m_ObjectHideFlags: 0

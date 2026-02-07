@@ -17,22 +17,24 @@ public class EnemiesFactory
     }
 
     public SimpleCharacter CreateEnemy(
-        SimpleCharacter prefab,
+        EnemyConfig enemyConfig,
         Vector3 spawnPosition,
-        Vector3 finalPosition,
-        float timeToChangeDirection,
-        float leashRadius,
-        float returnLockDuration
+        Vector3 finalPosition
         )
     {
 
-        SimpleCharacter instance = _charactersFactory.CreateCharacter(prefab, finalPosition, 5, 900, 100);
+        SimpleCharacter instance = _charactersFactory.CreateCharacter(
+            enemyConfig.prefab, 
+            finalPosition, 
+            enemyConfig.MoveSpeed, 
+            enemyConfig.RotationSpeed, 
+            enemyConfig.MaxHealth);
 
         Controller controller = _controllersFactory.CreateEnemyController(
             spawnPosition,
-            timeToChangeDirection,
-            leashRadius,
-            returnLockDuration,
+            enemyConfig.TimeToChangeDirection,
+            enemyConfig.LeashRadius,
+            enemyConfig.ReturnLockDuration,
             instance);
 
         controller.Enable();
