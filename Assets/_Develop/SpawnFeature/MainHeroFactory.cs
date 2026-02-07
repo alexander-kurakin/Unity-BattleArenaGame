@@ -20,9 +20,18 @@ public class MainHeroFactory
         _charactersFactory = charactersFactory;
     }
 
-    public SimpleCharacter Create(SimpleCharacter prefab, Vector3 spawnPosition, CinemachineVirtualCamera followCamera, KeyboardInput keyboardInput) 
+    public SimpleCharacter Create(
+        MainHeroConfig config, 
+        Vector3 spawnPosition, 
+        CinemachineVirtualCamera followCamera, 
+        KeyboardInput keyboardInput) 
     {
-        SimpleCharacter instance = _charactersFactory.CreateCharacter(prefab, spawnPosition, 5, 900, 100);
+        SimpleCharacter instance = _charactersFactory.CreateCharacter(
+            config.prefab, 
+            spawnPosition, 
+            config.MoveSpeed, 
+            config.RotationSpeed, 
+            config.MaxHealth);
 
         followCamera.Follow = instance.CameraTarget;
 

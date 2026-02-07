@@ -1773,7 +1773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8198a833921ef3468c72b3139754fd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 5808200297826222238, guid: 2427f550482159a4791ef237964807ed, type: 3}
+  _config: {fileID: 11400000, guid: ea2a155666758a8498a768d3364da509, type: 2}
   _spawnPoint: {fileID: 651747980}
   _followCamera: {fileID: 1404830365}
 --- !u!4 &1717129137
