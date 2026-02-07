@@ -18,18 +18,11 @@ public class EnemiesSpawner : MonoBehaviour
 
     private int _currentEnemiesCount = 0;
 
-    private ControllersUpdateService _controllersUpdateService;
-    private ControllersFactory _controllersFactory;
-    private CharactersFactory _charactersFactory;
+    private EnemiesFactory _enemiesFactory;
 
-    public void Init(
-        ControllersUpdateService controllersUpdateService,
-        ControllersFactory controllersFactory,
-        CharactersFactory charactersFactory)
+    public void Init(EnemiesFactory enemiesFactory)
     {
-        _controllersUpdateService = controllersUpdateService;
-        _controllersFactory = controllersFactory;
-        _charactersFactory = charactersFactory;
+        _enemiesFactory = enemiesFactory;
     }
 
     public IEnumerator Spawn()
@@ -40,18 +33,7 @@ public class EnemiesSpawner : MonoBehaviour
             Vector3 offset = new Vector3(randomPositionAroundSpawnPoint.x, 0, randomPositionAroundSpawnPoint.y);
             Vector3 finalPosition = _spawnPoint.position + offset;
 
-            SimpleCharacter instance = _charactersFactory.CreateCharacter(_prefab, finalPosition, 5, 900, 100);
-
-            Controller controller = _controllersFactory.CreateEnemyController(
-                _spawnPoint.position,
-                _timeToChangeDirection,
-                _leashRadius,
-                _returnLockDuration,
-                instance);
-                
-            controller.Enable();
-
-            _controllersUpdateService.Add( controller );
+            _enemiesFactory.CreateEnemy(_prefab, _spawnPoint.position, finalPosition, _timeToChangeDirection, _leashRadius, _returnLockDuration);
 
             _currentEnemiesCount++;
 

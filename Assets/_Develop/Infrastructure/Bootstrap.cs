@@ -14,6 +14,8 @@ public class Bootstrap : MonoBehaviour
     private ControllersUpdateService _controllersUpdateService;
     private ControllersFactory _controllersFactory;
     private CharactersFactory _charactersFactory;
+    EnemiesFactory _enemiesFactory;
+    MainHeroFactory _mainHeroFactory;
 
     private void Awake()
     {
@@ -29,10 +31,13 @@ public class Bootstrap : MonoBehaviour
         _controllersFactory = new ControllersFactory();
         _charactersFactory = new CharactersFactory();
 
-        _mainHeroSpawner.Init(_controllersUpdateService, _controllersFactory, _charactersFactory);
+        _enemiesFactory = new EnemiesFactory(_controllersUpdateService,_controllersFactory, _charactersFactory);
+        _mainHeroFactory = new MainHeroFactory(_controllersUpdateService, _controllersFactory, _charactersFactory);
+
+        _mainHeroSpawner.Init(_mainHeroFactory);
 
         foreach (EnemiesSpawner enemiesSpawner in _enemiesSpawners)
-            enemiesSpawner.Init(_controllersUpdateService, _controllersFactory, _charactersFactory);
+            enemiesSpawner.Init(_enemiesFactory);
 
         yield return new WaitForSeconds(1.5f);
 
@@ -48,7 +53,6 @@ public class Bootstrap : MonoBehaviour
 
         foreach (EnemiesSpawner enemiesSpawner in _enemiesSpawners)
             StartCoroutine(enemiesSpawner.Spawn());
-
     }
 
     private void Update()
