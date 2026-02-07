@@ -1,11 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SimpleCharacter : MonoBehaviour, IDamageable, IDirectionalRotatable, IDirectionalMovable
 {
-    [SerializeField] private float _moveSpeed = 5;
-    [SerializeField] private float _rotationSpeed = 900;
     [SerializeField] private int _maxHealth = 100;
     [SerializeField] private Transform _cameraTarget;
 
@@ -13,7 +9,6 @@ public class SimpleCharacter : MonoBehaviour, IDamageable, IDirectionalRotatable
 
     private Health _health;
 
-    private CharacterController _characterController;
     private DirectionalMover _mover;
     private DirectionalRotator _rotator;
 
@@ -23,14 +18,11 @@ public class SimpleCharacter : MonoBehaviour, IDamageable, IDirectionalRotatable
     public Transform CameraTarget => _cameraTarget;
     public Vector3 CurrentPosition => transform.position;
 
-    public void Init()
+    public void Init(DirectionalMover mover, DirectionalRotator rotator, Health health)
     {
-        _characterController = GetComponent<CharacterController>();
-
-        _mover = new DirectionalMover(_characterController, _moveSpeed);
-        _rotator = new DirectionalRotator(transform, _rotationSpeed);
-
-        _health = new Health(_maxHealth);
+        _mover = mover;
+        _rotator = rotator;
+        _health = health;
 
         foreach (IInitializable initializable in GetComponentsInChildren<IInitializable>())
             initializable.Init();

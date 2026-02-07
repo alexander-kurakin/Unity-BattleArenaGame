@@ -10,28 +10,30 @@ public class MainHeroSpawner : MonoBehaviour
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private CinemachineVirtualCamera _followCamera;
 
-    private Controller _heroController;
     private KeyboardInput _keyboardInput;
     private ControllersUpdateService _controllersUpdateService;
+    private ControllersFactory _controllersFactory;
+    private CharactersFactory _charactersFactory;
 
-    public void Init(ControllersUpdateService controllersUpdateService)
+    public void Init(
+        ControllersUpdateService controllersUpdateService,
+        ControllersFactory controllersFactory,
+        CharactersFactory charactersFactory)
     { 
         _controllersUpdateService = controllersUpdateService;
+        _controllersFactory = controllersFactory;
+        _charactersFactory = charactersFactory;
     }
 
     public SimpleCharacter Spawn()
     {
-        SimpleCharacter instance = Instantiate(_prefab, _spawnPoint.position, Quaternion.identity, null);
-        instance.Init();
+        SimpleCharacter instance = _charactersFactory.CreateCharacter(_prefab, _spawnPoint.position, 5, 900, 100);
 
         _followCamera.Follow = instance.CameraTarget;
 
         _keyboardInput = new KeyboardInput();
 
-        Controller controller = new CompositeController(
-            new PlayerDirectionalController(instance, _keyboardInput),
-            new PlayerRotatableController(instance, instance)
-            );
+        Controller controller = _controllersFactory.CreateMainHeroPlayerController(instance, _keyboardInput);
 
         controller.Enable();
         _controllersUpdateService.Add(controller);
