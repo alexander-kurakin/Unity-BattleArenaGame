@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6458886115052041095}
   - component: {fileID: 192121284418507939}
   - component: {fileID: 2101431239542264260}
+  - component: {fileID: 6222819639846639263}
   m_Layer: 0
   m_Name: HitBox
   m_TagString: Untagged
@@ -81,6 +82,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6222819639846639263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7589671259993735260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905686ef31cd0c948a5cc1ff026f2074, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hitDamage: 25
 --- !u!1001 &2668001096921402147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -328,9 +342,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10d8c887d701d429e8baf97c3b18424d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 5
-  _rotationSpeed: 900
-  _maxHealth: 100
   _cameraTarget: {fileID: 2849946828464600585}
 --- !u!143 &7630879848149878203
 CharacterController:
@@ -377,7 +388,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 8173232187557014643}
-  _simpleCharacter: {fileID: 6703345416262378604}
 --- !u!4 &7537198407622867404 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6655633338890725691, guid: 766bd15567b5ec84aad59e5952d47b54,

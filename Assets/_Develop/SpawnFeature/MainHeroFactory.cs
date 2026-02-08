@@ -37,7 +37,7 @@ public class MainHeroFactory
         Controller controller = _controllersFactory.CreateMainHeroPlayerController(instance, keyboardInput);
 
         controller.Enable();
-        _controllersUpdateService.Add(controller);
+        _controllersUpdateService.Add(controller, () => instance.IsDestroyed);
 
         return instance;
     }
