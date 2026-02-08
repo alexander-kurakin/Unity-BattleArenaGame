@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class Health
 {
     private int _currentHealth;

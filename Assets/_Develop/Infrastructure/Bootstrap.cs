@@ -1,17 +1,16 @@
 using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
 public class Bootstrap : MonoBehaviour
 {
+    [Header("UI settings")]
     [SerializeField] private LoadingScreen _loadingScreen;
     [SerializeField] private ConfirmPopup _confirmPopup;
 
     [SerializeField] private KeyCode _keyToContinue = KeyCode.F;
 
     [Header("Enemy Spawn settings")]
-    [SerializeField] private EnemyConfig _enemyConfig;
     [SerializeField] private Transform[] _enemySpawnPoints;
 
     [SerializeField] private float _enemySpawnRadius = 10f;
@@ -19,9 +18,7 @@ public class Bootstrap : MonoBehaviour
     [SerializeField] private int _enemyMaxEnemiesCount = 20;
 
     [Header("Main Hero Spawn settings")]
-    [SerializeField] private MainHeroConfig _mainHeroConfig;
     [SerializeField] private Transform _mainHeroSpawnPoint;
-    [SerializeField] private CinemachineVirtualCamera _mainHeroFollowCamera;
 
     private ControllersUpdateService _controllersUpdateService;
     private KeyboardInput _keyboardInput;
@@ -36,6 +33,9 @@ public class Bootstrap : MonoBehaviour
         _loadingScreen.Show();
         _loadingScreen.ShowMessage("Loading ...");
 
+        MainHeroConfig heroConfig = Resources.Load<MainHeroConfig>("Configs/MainHeroConfig");
+        EnemyConfig enemyConfig = Resources.Load<EnemyConfig>("Configs/EnemyConfig");
+
         _controllersUpdateService = new ControllersUpdateService();
         _keyboardInput = new KeyboardInput();
 
@@ -49,7 +49,7 @@ public class Bootstrap : MonoBehaviour
         
         yield return new WaitForSeconds(1.5f);
 
-        SimpleCharacter mainHero = mainHeroFactory.Create(_mainHeroConfig, _mainHeroSpawnPoint.position, _mainHeroFollowCamera, _keyboardInput);
+        SimpleCharacter mainHero = mainHeroFactory.Create(heroConfig, _mainHeroSpawnPoint.position, _keyboardInput);
 
         _loadingScreen.Hide();
         _confirmPopup.Show();
@@ -60,7 +60,7 @@ public class Bootstrap : MonoBehaviour
         _confirmPopup.Hide();
 
         foreach (Transform enemiesSpawnPosition in _enemySpawnPoints)
-            StartCoroutine(enemiesSpawner.Spawn(_enemyConfig, enemiesSpawnPosition, _enemyMaxEnemiesCount, _enemySpawnRadius, _enemySpawnTimerValue));
+            StartCoroutine(enemiesSpawner.Spawn(enemyConfig, enemiesSpawnPosition, _enemyMaxEnemiesCount, _enemySpawnRadius, _enemySpawnTimerValue));
     }
 
     private void Update()

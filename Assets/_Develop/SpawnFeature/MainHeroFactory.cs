@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MainHeroFactory 
@@ -23,7 +20,6 @@ public class MainHeroFactory
     public SimpleCharacter Create(
         MainHeroConfig config, 
         Vector3 spawnPosition, 
-        CinemachineVirtualCamera followCamera, 
         KeyboardInput keyboardInput) 
     {
         SimpleCharacter instance = _charactersFactory.CreateCharacter(
@@ -32,6 +28,9 @@ public class MainHeroFactory
             config.MoveSpeed, 
             config.RotationSpeed, 
             config.MaxHealth);
+
+        CinemachineVirtualCamera followCameraPrefab = Resources.Load<CinemachineVirtualCamera>("Prefabs/TestCamera");
+        CinemachineVirtualCamera followCamera = Object.Instantiate(followCameraPrefab);
 
         followCamera.Follow = instance.CameraTarget;
 
