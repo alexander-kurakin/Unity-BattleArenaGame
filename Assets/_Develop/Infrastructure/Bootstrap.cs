@@ -1,21 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class Bootstrap : MonoBehaviour
 {
-    [SerializeField] private MainHeroSpawner _mainHeroSpawner;
-    [SerializeField] private EnemiesSpawner[] _enemiesSpawners;
     [SerializeField] private LoadingScreen _loadingScreen;
     [SerializeField] private ConfirmPopup _confirmPopup;
 
     [SerializeField] private KeyCode _keyToContinue = KeyCode.F;
 
+    [Header("Enemy Spawn settings")]
+    [SerializeField] private EnemyConfig _enemyConfig;
+    [SerializeField] private Transform[] _enemySpawnPoints;
+
+    [SerializeField] private float _enemySpawnRadius = 10f;
+    [SerializeField] private float _enemySpawnTimerValue = 5f;
+    [SerializeField] private int _enemyMaxEnemiesCount = 20;
+
+    [Header("Main Hero Spawn settings")]
+    [SerializeField] private MainHeroConfig _mainHeroConfig;
+    [SerializeField] private Transform _mainHeroSpawnPoint;
+    [SerializeField] private CinemachineVirtualCamera _mainHeroFollowCamera;
+
     private ControllersUpdateService _controllersUpdateService;
-    private ControllersFactory _controllersFactory;
-    private CharactersFactory _charactersFactory;
-    EnemiesFactory _enemiesFactory;
-    MainHeroFactory _mainHeroFactory;
+    private KeyboardInput _keyboardInput;
 
     private void Awake()
     {
@@ -28,20 +37,19 @@ public class Bootstrap : MonoBehaviour
         _loadingScreen.ShowMessage("Loading ...");
 
         _controllersUpdateService = new ControllersUpdateService();
-        _controllersFactory = new ControllersFactory();
-        _charactersFactory = new CharactersFactory();
+        _keyboardInput = new KeyboardInput();
 
-        _enemiesFactory = new EnemiesFactory(_controllersUpdateService,_controllersFactory, _charactersFactory);
-        _mainHeroFactory = new MainHeroFactory(_controllersUpdateService, _controllersFactory, _charactersFactory);
+        ControllersFactory controllersFactory = new ControllersFactory();
+        CharactersFactory charactersFactory = new CharactersFactory();
 
-        _mainHeroSpawner.Init(_mainHeroFactory);
+        EnemiesFactory enemiesFactory = new EnemiesFactory(_controllersUpdateService, controllersFactory, charactersFactory);
+        MainHeroFactory mainHeroFactory = new MainHeroFactory(_controllersUpdateService, controllersFactory, charactersFactory);
 
-        foreach (EnemiesSpawner enemiesSpawner in _enemiesSpawners)
-            enemiesSpawner.Init(_enemiesFactory);
-
+        EnemiesSpawner enemiesSpawner = new EnemiesSpawner(enemiesFactory);
+        
         yield return new WaitForSeconds(1.5f);
 
-        SimpleCharacter mainHero = _mainHeroSpawner.Spawn();
+        SimpleCharacter mainHero = mainHeroFactory.Create(_mainHeroConfig, _mainHeroSpawnPoint.position, _mainHeroFollowCamera, _keyboardInput);
 
         _loadingScreen.Hide();
         _confirmPopup.Show();
@@ -51,12 +59,13 @@ public class Bootstrap : MonoBehaviour
 
         _confirmPopup.Hide();
 
-        foreach (EnemiesSpawner enemiesSpawner in _enemiesSpawners)
-            StartCoroutine(enemiesSpawner.Spawn());
+        foreach (Transform enemiesSpawnPosition in _enemySpawnPoints)
+            StartCoroutine(enemiesSpawner.Spawn(_enemyConfig, enemiesSpawnPosition, _enemyMaxEnemiesCount, _enemySpawnRadius, _enemySpawnTimerValue));
     }
 
     private void Update()
     {
         _controllersUpdateService?.Update(Time.deltaTime);
+        _keyboardInput?.Update(Time.deltaTime);
     }
 }

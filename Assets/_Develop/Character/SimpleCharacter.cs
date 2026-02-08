@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class SimpleCharacter : MonoBehaviour, IDamageable, IDirectionalRotatable, IDirectionalMovable
 {
-    [SerializeField] private int _maxHealth = 100;
     [SerializeField] private Transform _cameraTarget;
 
     private bool _isDead = false;
