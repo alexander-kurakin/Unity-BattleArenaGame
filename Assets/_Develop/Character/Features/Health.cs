@@ -20,12 +20,6 @@ public class Health
         Changed?.Invoke();
     }
 
-    public void ResetHealth(int maxHealthToSet)
-    { 
-        _currentHealth = maxHealthToSet;
-        Changed?.Invoke();
-    }
-
     public int CurrentHealth => _currentHealth;
     public bool HealthIsDrained => _currentHealth <= 0;
 }

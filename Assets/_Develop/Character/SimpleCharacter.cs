@@ -64,13 +64,6 @@ public class SimpleCharacter : MonoDestroyable, IDamageable, IDirectionalRotatab
         }
     }
 
-    public void ResetHealth()
-    {
-        _isDead = false;
-        _isDeadEventSent = false;
-        _health.ResetHealth(_maxHealth);
-    }
-
     public int GetCurrentHealth() => _health.CurrentHealth;
     public bool IsDead() => _isDead;
     public bool CanMove => _isDead == false;

@@ -20,7 +20,7 @@ MonoBehaviour:
   <EnemySpawnRadius>k__BackingField: 10
   <EnemySpawnTimer>k__BackingField: 2
   <WinConditionType>k__BackingField: 1
-  <LoseConditionType>k__BackingField: 0
+  <LoseConditionType>k__BackingField: 1
   <TargetEnemiesToKill>k__BackingField: 50
   <TargetSecondsToSurvive>k__BackingField: 5
   <TargetMaximumEnemies>k__BackingField: 40

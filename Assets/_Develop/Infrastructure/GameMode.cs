@@ -13,6 +13,7 @@ public class GameMode
 
     private EnemiesSpawner _enemiesSpawner;
     private ReactiveList<SimpleCharacter> _enemiesList = new ReactiveList<SimpleCharacter>();
+    private ReactiveList<Coroutine> _spawnCoroutineList = new ReactiveList<Coroutine>();
 
     private MonoBehaviour _coroutineRunner;
     private IWinCondition _winCondition;
@@ -92,13 +93,17 @@ public class GameMode
     private void SpawnEnemies()
     {
         foreach (Transform enemySpawnerPosition in _enemySpawnerPositions)
-            _coroutineRunner.StartCoroutine(_enemiesSpawner.Spawn(
+        {
+            Coroutine spawnCoroutine = _coroutineRunner.StartCoroutine(_enemiesSpawner.Spawn(
                 _levelConfig.EnemyConfig,
                 enemySpawnerPosition,
                 _levelConfig.EnemySpawnRadius,
                 _levelConfig.EnemySpawnTimer,
                 () => _isRunning
             ));
+
+            _spawnCoroutineList.Add(spawnCoroutine);
+        }
     }
 
     private void ProcessEndGame()
@@ -109,6 +114,14 @@ public class GameMode
             enemy.Destroy();
 
         _enemiesList.Clear();
+
+        foreach (Coroutine coroutine in _spawnCoroutineList)
+            _coroutineRunner.StopCoroutine(coroutine);
+
+        _spawnCoroutineList.Clear();
+
+        _winCondition.Completed -= OnWin;
+        _loseCondition.Completed -= OnLose;
 
         _winCondition?.Dispose();
         _loseCondition?.Dispose();

@@ -12,8 +12,6 @@ public class ReactiveList<T> : IReadOnlyReactiveList<T>
 
     public int Count => _items.Count;
 
-    public T this[int index] => _items[index];
-
     public void Add(T item)
     {
         _items.Add(item);

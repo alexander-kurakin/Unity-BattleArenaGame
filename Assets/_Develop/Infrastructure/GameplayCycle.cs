@@ -79,16 +79,22 @@ public class GameplayCycle : IDisposable
     private void OnGameModeDefeat()
     {
         OnGameModeEnded();
-        Debug.Log("Defeat");
-        _mainHero.ResetHealth();
+        Debug.Log("Defeat! " + _levelConfig.LoseConditionType);
+
+        _mainHero.Destroy();
+        Prepare();
+
         _couroutineRunner.StartCoroutine(Launch());
     }
 
     private void OnGameModeWin()
     {
         OnGameModeEnded();
-        Debug.Log("Win");
-        _mainHero.ResetHealth();
+        Debug.Log("Win " + _levelConfig.WinConditionType);
+
+        _mainHero.Destroy();
+        Prepare();
+
         _couroutineRunner.StartCoroutine(Launch());
     }
 }
