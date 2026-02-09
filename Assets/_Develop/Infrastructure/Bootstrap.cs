@@ -7,6 +7,7 @@ public class Bootstrap : MonoBehaviour
     [Header("UI settings")]
     [SerializeField] private LoadingScreen _loadingScreen;
     [SerializeField] private ConfirmPopup _confirmPopup;
+    [SerializeField] private ReactiveListView _reactiveListView;
 
     [SerializeField] private KeyCode _keyToContinue = KeyCode.F;
 
@@ -60,6 +61,8 @@ public class Bootstrap : MonoBehaviour
         _gameplayCycle.Prepare();
 
         _loadingScreen.Hide();
+
+        _reactiveListView.Init(enemiesList);
 
         yield return _gameplayCycle.Launch();
     }

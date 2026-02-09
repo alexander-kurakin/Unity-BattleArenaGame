@@ -84,7 +84,7 @@ public class GameMode
                 return new PlayerDied(_mainHero);
 
             case LoseConditionType.TooMuchEnemiesSpawned:
-                return new TooMuchEnemiesSpawned(_levelConfig.TargetEnemiesToKill, _enemiesList);
+                return new TooMuchEnemiesSpawned(_levelConfig.TargetMaximumEnemies, _enemiesList);
 
             default: return null;
         }

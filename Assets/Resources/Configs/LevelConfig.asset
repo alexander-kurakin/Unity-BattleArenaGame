@@ -21,6 +21,6 @@ MonoBehaviour:
   <EnemySpawnTimer>k__BackingField: 2
   <WinConditionType>k__BackingField: 1
   <LoseConditionType>k__BackingField: 1
-  <TargetEnemiesToKill>k__BackingField: 50
+  <TargetEnemiesToKill>k__BackingField: 25
   <TargetSecondsToSurvive>k__BackingField: 5
-  <TargetMaximumEnemies>k__BackingField: 40
+  <TargetMaximumEnemies>k__BackingField: 20
