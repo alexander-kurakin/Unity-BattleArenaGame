@@ -81,9 +81,11 @@ public class GameMode
         switch (loseConditionType)
         {
             case LoseConditionType.PlayerDied:
+                _mainHero.SetCanBeDamaged(true);
                 return new PlayerDied(_mainHero);
 
             case LoseConditionType.TooMuchEnemiesSpawned:
+                _mainHero.SetCanBeDamaged(false);
                 return new TooMuchEnemiesSpawned(_levelConfig.TargetMaximumEnemies, _enemiesList);
 
             default: return null;

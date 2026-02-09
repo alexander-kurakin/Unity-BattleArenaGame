@@ -8,7 +8,7 @@ public class HitBox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<IDamageable>(out IDamageable iDamageable) && )
+        if (other.TryGetComponent<IDamageable>(out IDamageable iDamageable))
             iDamageable.TakeDamage(_hitDamage);
     }
 }

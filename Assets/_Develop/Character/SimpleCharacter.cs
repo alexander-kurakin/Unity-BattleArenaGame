@@ -21,6 +21,8 @@ public class SimpleCharacter : MonoDestroyable, IDamageable, IDirectionalRotatab
     public Transform CameraTarget => _cameraTarget;
     public Vector3 CurrentPosition => transform.position;
 
+    public bool CanBeDamaged {get; private set;}
+
     public void Init(DirectionalMover mover, DirectionalRotator rotator, Health health)
     {
         _mover = mover;
@@ -35,6 +37,11 @@ public class SimpleCharacter : MonoDestroyable, IDamageable, IDirectionalRotatab
     public void SetShooter(Shooter shooter)
     {
         _shooter = shooter;
+    }
+
+    public void SetCanBeDamaged(bool state)
+    { 
+        CanBeDamaged = state;
     }
 
     private void Update()
@@ -56,6 +63,8 @@ public class SimpleCharacter : MonoDestroyable, IDamageable, IDirectionalRotatab
 
     public void TakeDamage(int damage)
     {
+        if (CanBeDamaged == false) return;
+
         if (damage < 0)
         {
             Debug.LogError(damage);
@@ -79,11 +88,8 @@ public class SimpleCharacter : MonoDestroyable, IDamageable, IDirectionalRotatab
     }
 
     public int GetCurrentHealth() => _health.CurrentHealth;
-    public bool IsDead() => _isDead;
     public bool CanMove => _isDead == false;
-
     public bool CanShoot => _isDead == false && _shooter != null;
-
     public Health GetHealth() => _health;
 
 }
