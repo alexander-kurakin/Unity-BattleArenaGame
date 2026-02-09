@@ -1864,6 +1864,8 @@ MonoBehaviour:
   - {fileID: 2085755316}
   - {fileID: 349095267}
   - {fileID: 529975630}
+  _bulletPrefab: {fileID: 5534054426042354409, guid: 0a613595c2a248d4181fb0959ec751a9,
+    type: 3}
 --- !u!4 &1844611150
 Transform:
   m_ObjectHideFlags: 0

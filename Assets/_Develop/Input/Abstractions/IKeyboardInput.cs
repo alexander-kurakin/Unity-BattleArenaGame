@@ -3,5 +3,5 @@
 public interface IKeyboardInput
 {
     Vector2 MoveAxisRaw { get; }
-    bool JumpActionPressed { get; }
+    bool ActionPressed { get; }
 }

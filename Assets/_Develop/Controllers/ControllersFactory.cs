@@ -12,6 +12,11 @@ public class ControllersFactory
         return new PlayerRotatableController(rotatable, movable);
     }
 
+    public PlayerShootableController CreatePlayerShootableController(SimpleCharacter character, IKeyboardInput input)
+    {
+        return new PlayerShootableController(character, character.transform, input);
+    }
+
     public RandomAIDIrectionalMovableController CreateRandomAIDIrectionalMovableController(
             Vector3 spawnPoint,
             float timeToChangeDirection,
@@ -32,7 +37,8 @@ public class ControllersFactory
     {
         return new CompositeController(
             CreatePlayerDirectionalController(character, input),
-            CreatePlayerRotatableController(character, character)
+            CreatePlayerRotatableController(character, character),
+            CreatePlayerShootableController(character, input)
             );
     }
 

@@ -14,6 +14,9 @@ public class Bootstrap : MonoBehaviour
     [Header("Enemy Spawn settings")]
     [SerializeField] private Transform[] _enemySpawnPoints;
 
+    [Header("Shooting settings")]
+    [SerializeField] private Bullet _bulletPrefab;
+
     private ControllersUpdateService _controllersUpdateService;
     private KeyboardInput _keyboardInput;
     private GameplayCycle _gameplayCycle;
@@ -35,9 +38,10 @@ public class Bootstrap : MonoBehaviour
 
         ControllersFactory controllersFactory = new ControllersFactory();
         CharactersFactory charactersFactory = new CharactersFactory();
+        BulletFactory bulletFactory = new BulletFactory(_bulletPrefab);
 
         EnemiesFactory enemiesFactory = new EnemiesFactory(_controllersUpdateService, controllersFactory, charactersFactory);
-        MainHeroFactory mainHeroFactory = new MainHeroFactory(_controllersUpdateService, controllersFactory, charactersFactory);
+        MainHeroFactory mainHeroFactory = new MainHeroFactory(_controllersUpdateService, controllersFactory, charactersFactory, bulletFactory);
 
         ReactiveList<SimpleCharacter> enemiesList = new ReactiveList<SimpleCharacter>();
 

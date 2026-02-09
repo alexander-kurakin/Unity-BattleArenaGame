@@ -4,7 +4,7 @@ public class KeyboardInput : IKeyboardInput
 {
     public Vector2 MoveAxisRaw { get; private set; }
 
-    public bool JumpActionPressed => Input.GetKeyDown(KeyCode.Space);
+    public bool ActionPressed => Input.GetKeyDown(KeyCode.Space);
 
     public void Update(float deltaTime)
     {

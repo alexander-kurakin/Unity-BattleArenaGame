@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class SimpleCharacter : MonoDestroyable, IDamageable, IDirectionalRotatable, IDirectionalMovable
+public class SimpleCharacter : MonoDestroyable, IDamageable, IDirectionalRotatable, IDirectionalMovable, IShootable
 {
     [SerializeField] private Transform _cameraTarget;
 
@@ -13,6 +13,7 @@ public class SimpleCharacter : MonoDestroyable, IDamageable, IDirectionalRotatab
     private Health _health;
     private DirectionalMover _mover;
     private DirectionalRotator _rotator;
+    private Shooter _shooter;
 
     public Vector3 CurrentVelocity => _mover.CurrentVelocity;
     public Quaternion CurrentRotation => _rotator.CurrentRotation;
@@ -25,10 +26,15 @@ public class SimpleCharacter : MonoDestroyable, IDamageable, IDirectionalRotatab
         _mover = mover;
         _rotator = rotator;
         _health = health;
+
         _maxHealth = _health.CurrentHealth;
 
         foreach (IInitializable initializable in GetComponentsInChildren<IInitializable>())
             initializable.Init();
+    }
+    public void SetShooter(Shooter shooter)
+    {
+        _shooter = shooter;
     }
 
     private void Update()
@@ -39,6 +45,14 @@ public class SimpleCharacter : MonoDestroyable, IDamageable, IDirectionalRotatab
 
     public void SetMoveDirection(Vector3 inputDirection) => _mover.SetInputDirection(inputDirection);
     public void SetRotationDirection(Vector3 inputDirection) => _rotator.SetInputDirection(inputDirection);
+
+    public void TryShoot(Vector3 direction)
+    {
+        if (CanShoot == false)
+            return;
+
+        _shooter?.TryShoot(direction);
+    }
 
     public void TakeDamage(int damage)
     {
@@ -67,6 +81,8 @@ public class SimpleCharacter : MonoDestroyable, IDamageable, IDirectionalRotatab
     public int GetCurrentHealth() => _health.CurrentHealth;
     public bool IsDead() => _isDead;
     public bool CanMove => _isDead == false;
+
+    public bool CanShoot => _isDead == false && _shooter != null;
 
     public Health GetHealth() => _health;
 

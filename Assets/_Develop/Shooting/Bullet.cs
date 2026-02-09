@@ -2,16 +2,25 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [SerializeField] private float _speed = 25f;
+    [SerializeField] private float _lifeTime = 3f;
+
     private Rigidbody _rigidbody;
 
-    private void Start()
+    private void Awake()
     {
-       if (TryGetComponent<Rigidbody>(out Rigidbody rigidBody))
+        if (TryGetComponent<Rigidbody>(out Rigidbody rigidBody))
             _rigidbody = rigidBody;
     }
 
-    private void Update()
+    public void Launch(Vector3 direction)
     {
-        _rigidbody.AddForce(Vector3.forward * Time.deltaTime * 25f);
+        direction.y = 0;
+        direction.Normalize();
+
+        transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
+
+        _rigidbody.velocity = direction * _speed;
+        Destroy(gameObject, _lifeTime);
     }
 }
