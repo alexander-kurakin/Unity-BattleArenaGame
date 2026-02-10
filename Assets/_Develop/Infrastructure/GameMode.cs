@@ -67,9 +67,11 @@ public class GameMode
         switch (winConditionType)
         {
             case WinConditionType.KillEnoughEnemies:
+                _mainHero.SetShouldShowTimer(false);
                 return new KillEnoughEnemies(_levelConfig.TargetEnemiesToKill, _enemiesList);
 
             case WinConditionType.StayAliveEnoughSeconds:
+                _mainHero.SetShouldShowTimer(true);
                 return new StayAliveEnoughSeconds(Time.time, _levelConfig.TargetSecondsToSurvive);
 
             default: return null;

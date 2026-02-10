@@ -8,6 +8,7 @@ public class Bootstrap : MonoBehaviour
     [SerializeField] private LoadingScreen _loadingScreen;
     [SerializeField] private ConfirmPopup _confirmPopup;
     [SerializeField] private ReactiveListView _reactiveListView;
+    [SerializeField] private StayAliveTimerView _stayAliveTimerView;
 
     [SerializeField] private KeyCode _keyToContinue = KeyCode.F;
 
@@ -58,7 +59,8 @@ public class Bootstrap : MonoBehaviour
             enemiesSpawner,
             _enemySpawnPoints,
             enemiesList,
-            this);
+            this,
+            _stayAliveTimerView);
             
         yield return new WaitForSeconds(1.5f);
 

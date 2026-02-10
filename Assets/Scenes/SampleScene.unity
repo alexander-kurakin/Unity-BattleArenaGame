@@ -1462,6 +1462,7 @@ GameObject:
   - component: {fileID: 1385356687}
   - component: {fileID: 1385356690}
   - component: {fileID: 1385356689}
+  - component: {fileID: 1385356691}
   m_Layer: 5
   m_Name: SimpleUI
   m_TagString: Untagged
@@ -1555,6 +1556,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _text: {fileID: 1577163954}
+--- !u!114 &1385356691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385356685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e516e3793ed76f448bea118bdfbf18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _timerText: {fileID: 321128878}
 --- !u!1 &1577163952
 GameObject:
   m_ObjectHideFlags: 0
@@ -1859,6 +1873,7 @@ MonoBehaviour:
   _loadingScreen: {fileID: 245626266}
   _confirmPopup: {fileID: 160959343}
   _reactiveListView: {fileID: 1385356690}
+  _stayAliveTimerView: {fileID: 1385356691}
   _keyToContinue: 102
   _enemySpawnPoints:
   - {fileID: 2085755316}

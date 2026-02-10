@@ -1,12 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class ReactiveListView : MonoBehaviour
 {
-    [SerializeField] TMP_Text _text;
+    [SerializeField] private TMP_Text _text;
+
     private ReactiveList<SimpleCharacter> _enemiesList = new ReactiveList<SimpleCharacter>();
     private int _killCount = 0;
 

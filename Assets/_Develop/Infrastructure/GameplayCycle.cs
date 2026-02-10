@@ -15,6 +15,7 @@ public class GameplayCycle : IDisposable
     private Transform[] _enemySpawnPoints;
     private ReactiveList<SimpleCharacter> _enemiesList = new ReactiveList<SimpleCharacter>();
     private MonoBehaviour _couroutineRunner;
+    private StayAliveTimerView _stayAliveTimerView;
 
     public GameplayCycle(
         MainHeroFactory mainHeroFactory, 
@@ -25,7 +26,8 @@ public class GameplayCycle : IDisposable
         EnemiesSpawner enemiesSpawner, 
         Transform[] enemySpawnPoints, 
         ReactiveList<SimpleCharacter> enemiesList, 
-        MonoBehaviour couroutineRunner)
+        MonoBehaviour couroutineRunner,
+        StayAliveTimerView stayAliveTimerView)
     {
         _mainHeroFactory = mainHeroFactory;
         _levelConfig = levelConfig;
@@ -36,11 +38,13 @@ public class GameplayCycle : IDisposable
         _enemySpawnPoints = enemySpawnPoints;
         _enemiesList = enemiesList;
         _couroutineRunner = couroutineRunner;
+        _stayAliveTimerView = stayAliveTimerView;
     }
 
     public void Prepare()
     {
         _mainHero = _mainHeroFactory.Create(_levelConfig.MainHeroConfig, _levelConfig.MainHeroSpawnPoint, _keyboardInput);
+        _stayAliveTimerView?.Init(_mainHero);
     }
 
     public IEnumerator Launch()
