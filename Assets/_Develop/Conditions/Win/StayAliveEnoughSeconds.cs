@@ -1,5 +1,5 @@
 using System;
-using System.Diagnostics;
+using UnityEngine;
 
 public class StayAliveEnoughSeconds : IWinCondition
 {
@@ -7,12 +7,14 @@ public class StayAliveEnoughSeconds : IWinCondition
 
     private float _timeStarted;
     private float _targetSecondsAlive;
-    private bool _IsWinEventSent;
+    private bool _isWinEventSent;
+    private StayAliveTimer _timer;
 
-    public StayAliveEnoughSeconds(float timeStarted, float targetSecondsAlive)
+    public StayAliveEnoughSeconds(float timeStarted, float targetSecondsAlive, StayAliveTimer timer)
     {
         _timeStarted = timeStarted;
         _targetSecondsAlive = targetSecondsAlive;
+        _timer = timer;
     }
 
     public void Start()
@@ -21,15 +23,17 @@ public class StayAliveEnoughSeconds : IWinCondition
 
     public void Update(float deltaTime)
     {
-        if ((deltaTime - _timeStarted) >= _targetSecondsAlive)
+        float elapsedTime = Time.time - _timeStarted;
+        _timer.SetElapsedTime(elapsedTime);
+
+        if (elapsedTime >= _targetSecondsAlive)
         {
-            if (_IsWinEventSent)
+            if (_isWinEventSent)
                 return;
 
             Completed?.Invoke();
-            _IsWinEventSent = true;
+            _isWinEventSent = true;
         }
-
     }
 
     public void Dispose()

@@ -50,6 +50,8 @@ public class Bootstrap : MonoBehaviour
 
         LevelConfig levelConfig = levelsListConfig.GetRandom();
 
+        StayAliveTimer stayAliveTimer = new StayAliveTimer();
+
         _gameplayCycle = new GameplayCycle(
             mainHeroFactory,
             levelConfig,
@@ -60,7 +62,8 @@ public class Bootstrap : MonoBehaviour
             _enemySpawnPoints,
             enemiesList,
             this,
-            _stayAliveTimerView);
+            _stayAliveTimerView,
+            stayAliveTimer);
             
         yield return new WaitForSeconds(1.5f);
 

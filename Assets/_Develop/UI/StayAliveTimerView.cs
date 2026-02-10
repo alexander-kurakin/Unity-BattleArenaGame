@@ -6,17 +6,17 @@ public class StayAliveTimerView : MonoBehaviour
     [SerializeField] private TMP_Text _timerText;
 
     private SimpleCharacter _character;
-    private bool _isTimerRunning;
-    private float _startTime;
+    private StayAliveTimer _timer;
 
-    public void Init(SimpleCharacter character)
+    public void Init(SimpleCharacter character, StayAliveTimer timer)
     {
         _character = character;
+        _timer = timer;
     }
 
     private void Update()
     {
-        if (_character == null || _timerText == null)
+        if (_character == null || _timerText == null || _timer == null)
             return;
 
         if (_character.ShouldShowTimer == false)
@@ -25,30 +25,18 @@ public class StayAliveTimerView : MonoBehaviour
             return;
         }
 
-        if (_isTimerRunning == false)
-            StartTimer();
-
         UpdateTimerText();
-    }
-
-    private void StartTimer()
-    {
-        _startTime = Time.time;
-        _isTimerRunning = true;
     }
 
     private void Hide()
     {
-        _isTimerRunning = false;
         _timerText.text = string.Empty;
     }
 
     private void UpdateTimerText()
     {
-        float elapsedTime = Time.time - _startTime;
-
-        int minutes = Mathf.FloorToInt(elapsedTime / 60f);
-        int seconds = Mathf.FloorToInt(elapsedTime % 60f);
+        int minutes = Mathf.FloorToInt(_timer.ElapsedTime / 60f);
+        int seconds = Mathf.FloorToInt(_timer.ElapsedTime % 60f);
 
         _timerText.text = $"Живём уже: {minutes:00}:{seconds:00}";
     }

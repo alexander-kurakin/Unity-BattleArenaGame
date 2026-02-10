@@ -18,6 +18,8 @@ public class GameMode
     private MonoBehaviour _coroutineRunner;
     private IWinCondition _winCondition;
     private ILoseCondition _loseCondition;
+    private StayAliveTimer _timer;
+    private StayAliveTimerView _stayAliveTimerView;
 
     private bool _isRunning;
 
@@ -27,7 +29,9 @@ public class GameMode
         EnemiesSpawner enemiesSpawner,
         Transform[] enemySpawnerPositions,
         ReactiveList<SimpleCharacter> enemiesList,
-        MonoBehaviour coroutineRunner)
+        MonoBehaviour coroutineRunner,
+        StayAliveTimer timer,
+        StayAliveTimerView stayAliveTimerView)
     {
         _levelConfig = levelConfig;
         _mainHero = mainHero;
@@ -35,6 +39,8 @@ public class GameMode
         _enemySpawnerPositions = enemySpawnerPositions;
         _enemiesList = enemiesList;
         _coroutineRunner = coroutineRunner;
+        _timer = timer;
+        _stayAliveTimerView = stayAliveTimerView;
     }
 
     public void Start()
@@ -72,7 +78,8 @@ public class GameMode
 
             case WinConditionType.StayAliveEnoughSeconds:
                 _mainHero.SetShouldShowTimer(true);
-                return new StayAliveEnoughSeconds(Time.time, _levelConfig.TargetSecondsToSurvive);
+                _stayAliveTimerView?.Init(_mainHero, _timer);
+                return new StayAliveEnoughSeconds(Time.time, _levelConfig.TargetSecondsToSurvive, _timer);
 
             default: return null;
         }

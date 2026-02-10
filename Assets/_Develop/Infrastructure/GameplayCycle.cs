@@ -16,6 +16,7 @@ public class GameplayCycle : IDisposable
     private ReactiveList<SimpleCharacter> _enemiesList = new ReactiveList<SimpleCharacter>();
     private MonoBehaviour _couroutineRunner;
     private StayAliveTimerView _stayAliveTimerView;
+    private StayAliveTimer _timer;
 
     public GameplayCycle(
         MainHeroFactory mainHeroFactory, 
@@ -27,7 +28,8 @@ public class GameplayCycle : IDisposable
         Transform[] enemySpawnPoints, 
         ReactiveList<SimpleCharacter> enemiesList, 
         MonoBehaviour couroutineRunner,
-        StayAliveTimerView stayAliveTimerView)
+        StayAliveTimerView stayAliveTimerView,
+        StayAliveTimer timer)
     {
         _mainHeroFactory = mainHeroFactory;
         _levelConfig = levelConfig;
@@ -39,12 +41,12 @@ public class GameplayCycle : IDisposable
         _enemiesList = enemiesList;
         _couroutineRunner = couroutineRunner;
         _stayAliveTimerView = stayAliveTimerView;
+        _timer = timer;
     }
 
     public void Prepare()
     {
         _mainHero = _mainHeroFactory.Create(_levelConfig.MainHeroConfig, _levelConfig.MainHeroSpawnPoint, _keyboardInput);
-        _stayAliveTimerView?.Init(_mainHero);
     }
 
     public IEnumerator Launch()
@@ -56,7 +58,7 @@ public class GameplayCycle : IDisposable
 
         _confirmPopup.Hide();
 
-        _gameMode = new GameMode(_levelConfig, _mainHero, _enemiesSpawner, _enemySpawnPoints, _enemiesList, _couroutineRunner);
+        _gameMode = new GameMode(_levelConfig, _mainHero, _enemiesSpawner, _enemySpawnPoints, _enemiesList, _couroutineRunner, _timer, _stayAliveTimerView);
 
         _gameMode.Win += OnGameModeWin;
         _gameMode.Defeat += OnGameModeDefeat;
