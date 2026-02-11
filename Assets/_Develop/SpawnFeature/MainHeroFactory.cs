@@ -37,7 +37,8 @@ public class MainHeroFactory
         Shooter shooter = new Shooter(
             _bulletFactory,
             shootPoint.transform,
-            config.ShootColdown);
+            config.ShootColdown,
+            config.ProjectileDamage);
 
         instance.SetShooter(shooter);
 

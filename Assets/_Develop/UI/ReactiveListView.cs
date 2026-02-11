@@ -13,6 +13,7 @@ public class ReactiveListView : MonoBehaviour
         _enemiesList = enemiesList;
 
         _enemiesList.Removed += OnEnemyKilled;
+        _enemiesList.Cleared += OnEnemyListCleared;
     }
 
     private void Start()
@@ -35,5 +36,10 @@ public class ReactiveListView : MonoBehaviour
     private void OnEnemyKilled(SimpleCharacter character)
     {
         _killCount++;
+    }
+
+    private void OnEnemyListCleared()
+    {
+        _killCount = 0;
     }
 }

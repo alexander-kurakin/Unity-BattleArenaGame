@@ -19,8 +19,8 @@ MonoBehaviour:
   <MainHeroSpawnPoint>k__BackingField: {x: 0, y: 0, z: 0}
   <EnemySpawnRadius>k__BackingField: 10
   <EnemySpawnTimer>k__BackingField: 2
-  <WinConditionType>k__BackingField: 1
+  <WinConditionType>k__BackingField: 0
   <LoseConditionType>k__BackingField: 1
-  <TargetEnemiesToKill>k__BackingField: 25
+  <TargetEnemiesToKill>k__BackingField: 10
   <TargetSecondsToSurvive>k__BackingField: 5
-  <TargetMaximumEnemies>k__BackingField: 20
+  <TargetMaximumEnemies>k__BackingField: 40

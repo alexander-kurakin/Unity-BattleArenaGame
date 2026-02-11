@@ -19,8 +19,7 @@ public class EnemiesSpawner
         Transform spawnPoint,
         float spawnRadius,
         float spawnTimerValue,
-        Func<bool> canSpawn
-        )
+        Func<bool> canSpawn)
     {
         while (canSpawn())
         {
@@ -32,7 +31,15 @@ public class EnemiesSpawner
 
             _enemiesList.Add(createdEnemy);
 
+            createdEnemy.Died += () => OnEnemyDied(createdEnemy);
+
             yield return new WaitForSeconds(spawnTimerValue);
         }
+    }
+
+    private void OnEnemyDied(SimpleCharacter enemy)
+    {
+        _enemiesList.Remove(enemy);
+        enemy.Destroy();
     }
 }

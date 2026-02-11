@@ -8,4 +8,5 @@ public class MainHeroConfig : ScriptableObject
     [field: SerializeField] public float RotationSpeed { get; private set; } = 900;
     [field: SerializeField] public int MaxHealth { get; private set; } = 100;
     [field: SerializeField] public float ShootColdown { get; private set; } = 0.5f;
+    [field: SerializeField] public int ProjectileDamage { get; private set; } = 100;
 }

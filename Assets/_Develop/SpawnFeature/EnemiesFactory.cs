@@ -19,10 +19,8 @@ public class EnemiesFactory
     public SimpleCharacter CreateEnemy(
         EnemyConfig enemyConfig,
         Vector3 spawnPosition,
-        Vector3 finalPosition
-        )
+        Vector3 finalPosition)
     {
-
         SimpleCharacter instance = _charactersFactory.CreateCharacter(
             enemyConfig.prefab, 
             finalPosition, 
@@ -40,6 +38,8 @@ public class EnemiesFactory
         controller.Enable();
 
         _controllersUpdateService.Add(controller, () => instance.IsDestroyed);
+
+        instance.SetCanBeDamaged(true);
 
         return instance;
     }
