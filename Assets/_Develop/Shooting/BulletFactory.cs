@@ -12,8 +12,8 @@ public class BulletFactory
     {
         Bullet bullet = Object.Instantiate(_bulletPrefab, position, Quaternion.identity);
 
-        if (bullet.TryGetComponent<BulletHitBox>(out BulletHitBox hitBox))
-            hitBox.SetDamage(damage);
+        if (bullet.TryGetComponent<DamageDealingHitBox>(out DamageDealingHitBox hitBox))
+            hitBox.SetDamage(damage, true);
 
         bullet.Launch(direction);
 

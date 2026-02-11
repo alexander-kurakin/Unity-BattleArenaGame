@@ -41,6 +41,8 @@ public class EnemiesFactory
 
         instance.SetCanBeDamaged(true);
 
+        instance.GetComponentInChildren<DamageDealingHitBox>()?.SetDamage(enemyConfig.DamageToHero);
+
         return instance;
     }
 }

@@ -11,4 +11,5 @@ public class EnemyConfig : ScriptableObject
     [field: SerializeField] public float TimeToChangeDirection { get; private set; } = 2f;
     [field: SerializeField] public float LeashRadius { get; private set; } = 10f;
     [field: SerializeField] public float ReturnLockDuration { get; private set; } = 1f;
+    [field: SerializeField] public int DamageToHero { get; private set; } = 25;
 }
