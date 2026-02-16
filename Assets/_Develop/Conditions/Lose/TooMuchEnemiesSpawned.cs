@@ -1,15 +1,15 @@
 using System;
 
-public class TooMuchEnemiesSpawned : ILoseCondition
+public class TooMuchEnemiesSpawned : IGameCondition
 {
     public event Action Completed;
     private bool _IsLoseEventSent;
 
     private int _currentEnemies = 0;
     private int _targetEnemies;
-    private ReactiveList<SimpleCharacter> _enemyList = new ReactiveList<SimpleCharacter>();
+    private IReadOnlyReactiveList<SimpleCharacter> _enemyList;
 
-    public TooMuchEnemiesSpawned(int targetEnemies, ReactiveList<SimpleCharacter> enemyList)
+    public TooMuchEnemiesSpawned(int targetEnemies, IReadOnlyReactiveList<SimpleCharacter> enemyList)
     {
         _targetEnemies = targetEnemies;
         _enemyList = enemyList;

@@ -13,7 +13,7 @@ public class GameplayCycle : IDisposable
     private GameMode _gameMode;
     private EnemiesSpawner _enemiesSpawner;
     private Transform[] _enemySpawnPoints;
-    private ReactiveList<SimpleCharacter> _enemiesList = new ReactiveList<SimpleCharacter>();
+    private ReactiveList<SimpleCharacter> _enemiesList;
     private MonoBehaviour _couroutineRunner;
     private StayAliveTimerView _stayAliveTimerView;
     private StayAliveTimer _timer;

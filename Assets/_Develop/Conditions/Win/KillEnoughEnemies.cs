@@ -1,15 +1,15 @@
 using System;
 
-public class KillEnoughEnemies : IWinCondition
+public class KillEnoughEnemies : IGameCondition
 {
     public event Action Completed;
     private bool _IsWinEventSent;
 
     private int _currentKills = 0;
     private int _targetKills;
-    private ReactiveList<SimpleCharacter> _enemyList = new ReactiveList<SimpleCharacter>();
+    private IReadOnlyReactiveList<SimpleCharacter> _enemyList;
 
-    public KillEnoughEnemies(int targetKills, ReactiveList<SimpleCharacter> enemyList)
+    public KillEnoughEnemies(int targetKills, IReadOnlyReactiveList<SimpleCharacter> enemyList)
     {
         _targetKills = targetKills;
         _enemyList = enemyList;

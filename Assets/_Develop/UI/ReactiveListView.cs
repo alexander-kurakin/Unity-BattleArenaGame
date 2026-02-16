@@ -5,10 +5,10 @@ public class ReactiveListView : MonoBehaviour
 {
     [SerializeField] private TMP_Text _text;
 
-    private ReactiveList<SimpleCharacter> _enemiesList = new ReactiveList<SimpleCharacter>();
+    private IReadOnlyReactiveList<SimpleCharacter> _enemiesList;
     private int _killCount = 0;
 
-    public void Init(ReactiveList<SimpleCharacter> enemiesList)
+    public void Init(IReadOnlyReactiveList<SimpleCharacter> enemiesList)
     {
         _enemiesList = enemiesList;
 

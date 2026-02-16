@@ -1,7 +1,7 @@
 using System;
 using Object = UnityEngine.Object;
 
-public class PlayerDied : ILoseCondition
+public class PlayerDied : IGameCondition
 {
     public event Action Completed;
     private SimpleCharacter _mainHero;

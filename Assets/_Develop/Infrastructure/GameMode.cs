@@ -12,12 +12,12 @@ public class GameMode
     private Transform[] _enemySpawnerPositions;
 
     private EnemiesSpawner _enemiesSpawner;
-    private ReactiveList<SimpleCharacter> _enemiesList = new ReactiveList<SimpleCharacter>();
+    private ReactiveList<SimpleCharacter> _enemiesList;
     private ReactiveList<Coroutine> _spawnCoroutineList = new ReactiveList<Coroutine>();
 
     private MonoBehaviour _coroutineRunner;
-    private IWinCondition _winCondition;
-    private ILoseCondition _loseCondition;
+    private IGameCondition _winCondition;
+    private IGameCondition _loseCondition;
     private StayAliveTimer _timer;
     private StayAliveTimerView _stayAliveTimerView;
 
@@ -68,7 +68,7 @@ public class GameMode
         _loseCondition.Update(deltaTime);
     }
 
-    private IWinCondition GetWinCondition(WinConditionType winConditionType)
+    private IGameCondition GetWinCondition(WinConditionType winConditionType)
     {
         switch (winConditionType)
         {
@@ -85,7 +85,7 @@ public class GameMode
         }
     }
 
-    private ILoseCondition GetLoseCondition(LoseConditionType loseConditionType)
+    private IGameCondition GetLoseCondition(LoseConditionType loseConditionType)
     {
         switch (loseConditionType)
         {

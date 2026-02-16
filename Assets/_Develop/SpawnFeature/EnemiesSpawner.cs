@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 public class EnemiesSpawner
 {
     private EnemiesFactory _enemiesFactory;
-    private readonly ReactiveList<SimpleCharacter> _enemiesList = new ReactiveList<SimpleCharacter>();
+    private readonly ReactiveList<SimpleCharacter> _enemiesList;
 
     public EnemiesSpawner(EnemiesFactory enemiesFactory, ReactiveList<SimpleCharacter> enemiesList)
     {

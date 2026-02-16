@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class StayAliveEnoughSeconds : IWinCondition
+public class StayAliveEnoughSeconds : IGameCondition
 {
     public event Action Completed;
 
