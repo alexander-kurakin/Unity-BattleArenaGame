@@ -5,31 +5,24 @@ public class StayAliveTimerView : MonoBehaviour
 {
     [SerializeField] private TMP_Text _timerText;
 
-    private SimpleCharacter _character;
     private StayAliveTimer _timer;
 
-    public void Init(SimpleCharacter character, StayAliveTimer timer)
+    public void Init(StayAliveTimer timer)
     {
-        _character = character;
         _timer = timer;
     }
 
     private void Update()
     {
-        if (_character == null || _timerText == null || _timer == null)
+        if (_timerText == null || _timer == null)
             return;
-
-        if (_character.ShouldShowTimer == false)
-        {
-            Hide();
-            return;
-        }
 
         UpdateTimerText();
     }
 
-    private void Hide()
+    public void Hide()
     {
+        _timer = null;
         _timerText.text = string.Empty;
     }
 

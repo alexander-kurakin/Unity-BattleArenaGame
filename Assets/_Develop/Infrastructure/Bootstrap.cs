@@ -1,5 +1,4 @@
 using System.Collections;
-using Cinemachine;
 using UnityEngine;
 
 public class Bootstrap : MonoBehaviour
@@ -51,6 +50,8 @@ public class Bootstrap : MonoBehaviour
         LevelConfig levelConfig = levelsListConfig.GetRandom();
 
         StayAliveTimer stayAliveTimer = new StayAliveTimer();
+        ConditionsFactory conditionsFactory = new ConditionsFactory();
+        GameRules gameRules = new GameRules();
 
         _gameplayCycle = new GameplayCycle(
             mainHeroFactory,
@@ -63,7 +64,9 @@ public class Bootstrap : MonoBehaviour
             enemiesList,
             this,
             _stayAliveTimerView,
-            stayAliveTimer);
+            stayAliveTimer,
+            conditionsFactory,
+            gameRules);
             
         yield return new WaitForSeconds(1.5f);
 

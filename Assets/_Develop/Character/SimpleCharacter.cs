@@ -22,7 +22,6 @@ public class SimpleCharacter : MonoDestroyable, IDamageable, IDirectionalRotatab
     public Vector3 CurrentPosition => transform.position;
 
     public bool CanBeDamaged {get; private set;}
-    public bool ShouldShowTimer { get; private set;}
 
     public void Init(DirectionalMover mover, DirectionalRotator rotator, Health health)
     {
@@ -43,11 +42,6 @@ public class SimpleCharacter : MonoDestroyable, IDamageable, IDirectionalRotatab
     public void SetCanBeDamaged(bool state)
     { 
         CanBeDamaged = state;
-    }
-
-    public void SetShouldShowTimer(bool state)
-    {
-        ShouldShowTimer = state;
     }
 
     private void Update()

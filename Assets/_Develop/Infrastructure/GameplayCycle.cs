@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameplayCycle : IDisposable
@@ -14,9 +15,12 @@ public class GameplayCycle : IDisposable
     private EnemiesSpawner _enemiesSpawner;
     private Transform[] _enemySpawnPoints;
     private ReactiveList<SimpleCharacter> _enemiesList;
-    private MonoBehaviour _couroutineRunner;
+    private MonoBehaviour _coroutineRunner;
     private StayAliveTimerView _stayAliveTimerView;
     private StayAliveTimer _timer;
+    private ConditionsFactory _conditionsFactory;
+    private GameRules _gameRules;
+    private List<Coroutine> _spawnCoroutines = new List<Coroutine>();
 
     public GameplayCycle(
         MainHeroFactory mainHeroFactory, 
@@ -27,9 +31,11 @@ public class GameplayCycle : IDisposable
         EnemiesSpawner enemiesSpawner, 
         Transform[] enemySpawnPoints, 
         ReactiveList<SimpleCharacter> enemiesList, 
-        MonoBehaviour couroutineRunner,
+        MonoBehaviour coroutineRunner,
         StayAliveTimerView stayAliveTimerView,
-        StayAliveTimer timer)
+        StayAliveTimer timer,
+        ConditionsFactory conditionsFactory,
+        GameRules gameRules)
     {
         _mainHeroFactory = mainHeroFactory;
         _levelConfig = levelConfig;
@@ -39,9 +45,11 @@ public class GameplayCycle : IDisposable
         _enemiesSpawner = enemiesSpawner;
         _enemySpawnPoints = enemySpawnPoints;
         _enemiesList = enemiesList;
-        _couroutineRunner = couroutineRunner;
+        _coroutineRunner = coroutineRunner;
         _stayAliveTimerView = stayAliveTimerView;
         _timer = timer;
+        _conditionsFactory = conditionsFactory;
+        _gameRules = gameRules;
     }
 
     public void Prepare()
@@ -58,17 +66,27 @@ public class GameplayCycle : IDisposable
 
         _confirmPopup.Hide();
 
-        _gameMode = new GameMode(_levelConfig, _mainHero, _enemiesSpawner, _enemySpawnPoints, _enemiesList, _couroutineRunner, _timer, _stayAliveTimerView);
+        _gameRules.SetRules(_levelConfig, _mainHero, _stayAliveTimerView, _timer);
+
+        IGameCondition winCondition = _conditionsFactory.CreateWinCondition(
+            _levelConfig.WinConditionType, _levelConfig, _enemiesList, _timer);
+
+        IGameCondition loseCondition = _conditionsFactory.CreateLoseCondition(
+            _levelConfig.LoseConditionType, _levelConfig, _mainHero, _enemiesList);
+
+        _gameMode = new GameMode(winCondition, loseCondition);
 
         _gameMode.Win += OnGameModeWin;
         _gameMode.Defeat += OnGameModeDefeat;
 
         _gameMode.Start();
+
+        SpawnEnemies();
     }
 
     public void Update(float deltaTime) => _gameMode?.Update(deltaTime);
 
-    private void OnGameModeEnded()
+    public void Dispose()
     {
         if (_gameMode != null)
         {
@@ -77,30 +95,60 @@ public class GameplayCycle : IDisposable
         }
     }
 
-    public void Dispose()
+    private void SpawnEnemies()
     {
-        OnGameModeEnded();
+        foreach (Transform spawnPoint in _enemySpawnPoints)
+        {
+            Coroutine spawnCoroutine = _coroutineRunner.StartCoroutine(_enemiesSpawner.Spawn(
+                _levelConfig.EnemyConfig,
+                spawnPoint,
+                _levelConfig.EnemySpawnRadius,
+                _levelConfig.EnemySpawnTimer,
+                () => _gameMode != null && _gameMode.IsRunning
+            ));
+
+            _spawnCoroutines.Add(spawnCoroutine);
+        }
+    }
+
+    private void StopSpawning()
+    {
+        foreach (Coroutine coroutine in _spawnCoroutines)
+            _coroutineRunner.StopCoroutine(coroutine);
+
+        _spawnCoroutines.Clear();
+    }
+
+    private void CleanupEnemies()
+    {
+        foreach (SimpleCharacter enemy in _enemiesList)
+            enemy.Destroy();
+
+        _enemiesList.Clear();
+    }
+
+    private void Restart()
+    {
+        Dispose();
+        StopSpawning();
+        CleanupEnemies();
+        _stayAliveTimerView?.Hide();
+
+        _mainHero.Destroy();
+        Prepare();
+
+        _coroutineRunner.StartCoroutine(Launch());
     }
 
     private void OnGameModeDefeat()
     {
-        OnGameModeEnded();
         Debug.Log("Defeat! " + _levelConfig.LoseConditionType);
-
-        _mainHero.Destroy();
-        Prepare();
-
-        _couroutineRunner.StartCoroutine(Launch());
+        Restart();
     }
 
     private void OnGameModeWin()
     {
-        OnGameModeEnded();
         Debug.Log("Win " + _levelConfig.WinConditionType);
-
-        _mainHero.Destroy();
-        Prepare();
-
-        _couroutineRunner.StartCoroutine(Launch());
+        Restart();
     }
 }
