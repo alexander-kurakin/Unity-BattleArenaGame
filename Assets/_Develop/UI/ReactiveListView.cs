@@ -7,6 +7,7 @@ public class ReactiveListView : MonoBehaviour
 
     private IReadOnlyReactiveList<SimpleCharacter> _enemiesList;
     private int _killCount = 0;
+    private bool _isInit;
 
     public void Init(IReadOnlyReactiveList<SimpleCharacter> enemiesList)
     {
@@ -14,6 +15,8 @@ public class ReactiveListView : MonoBehaviour
 
         _enemiesList.Removed += OnEnemyKilled;
         _enemiesList.Cleared += OnEnemyListCleared;
+
+        _isInit = true;
     }
 
     private void Start()
@@ -28,7 +31,8 @@ public class ReactiveListView : MonoBehaviour
 
     private void UpdateText()
     {
-        _text.text =
+        if (_isInit)
+            _text.text =
             "Всего врагов = " + _enemiesList.Count.ToString() + "\n" +
             "Врагов убито = " + _killCount;
 
