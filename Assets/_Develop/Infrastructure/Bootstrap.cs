@@ -50,13 +50,12 @@ public class Bootstrap : MonoBehaviour
         LevelConfig levelConfig = levelsListConfig.GetRandom();
 
         StayAliveTimer stayAliveTimer = new StayAliveTimer();
-        ConditionsFactory conditionsFactory = new ConditionsFactory();
-        GameRules gameRules = new GameRules();
+        PlayerProvider playerProvider = new PlayerProvider(mainHeroFactory, _keyboardInput);
+        ConditionsFactory conditionsFactory = new ConditionsFactory(playerProvider);
+        GameRules gameRules = new GameRules(playerProvider);
 
         _gameplayCycle = new GameplayCycle(
-            mainHeroFactory,
             levelConfig,
-            _keyboardInput,
             _confirmPopup,
             _keyToContinue,
             enemiesSpawner,
@@ -66,7 +65,8 @@ public class Bootstrap : MonoBehaviour
             _stayAliveTimerView,
             stayAliveTimer,
             conditionsFactory,
-            gameRules);
+            gameRules,
+            playerProvider);
             
         yield return new WaitForSeconds(1.5f);
 

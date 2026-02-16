@@ -2,6 +2,13 @@ using UnityEngine;
 
 public class ConditionsFactory
 {
+    private PlayerProvider _playerProvider;
+
+    public ConditionsFactory(PlayerProvider playerProvider)
+    {
+        _playerProvider = playerProvider;
+    }
+
     public IGameCondition CreateWinCondition(
         WinConditionType winConditionType,
         LevelConfig levelConfig,
@@ -23,13 +30,12 @@ public class ConditionsFactory
     public IGameCondition CreateLoseCondition(
         LoseConditionType loseConditionType,
         LevelConfig levelConfig,
-        SimpleCharacter mainHero,
         IReadOnlyReactiveList<SimpleCharacter> enemiesList)
     {
         switch (loseConditionType)
         {
             case LoseConditionType.PlayerDied:
-                return new PlayerDied(mainHero);
+                return new PlayerDied(_playerProvider.MainHero);
 
             case LoseConditionType.TooMuchEnemiesSpawned:
                 return new TooMuchEnemiesSpawned(levelConfig.TargetMaximumEnemies, enemiesList);

@@ -1,8 +1,14 @@
 public class GameRules
 {
+    private PlayerProvider _playerProvider;
+
+    public GameRules(PlayerProvider playerProvider)
+    {
+        _playerProvider = playerProvider;
+    }
+
     public void SetRules(
         LevelConfig levelConfig,
-        SimpleCharacter mainHero,
         StayAliveTimerView timerView,
         StayAliveTimer timer)
     {
@@ -14,6 +20,6 @@ public class GameRules
             timerView?.Hide();
 
         bool canHeroBeDamaged = levelConfig.LoseConditionType == LoseConditionType.PlayerDied;
-        mainHero.SetCanBeDamaged(canHeroBeDamaged);
+        _playerProvider.MainHero.SetCanBeDamaged(canHeroBeDamaged);
     }
 }

@@ -5,10 +5,7 @@ using UnityEngine;
 
 public class GameplayCycle : IDisposable
 {
-    private MainHeroFactory _mainHeroFactory;
     private LevelConfig _levelConfig;
-    private SimpleCharacter _mainHero;
-    private KeyboardInput _keyboardInput;
     private ConfirmPopup _confirmPopup;
     private KeyCode _keyToContinue;
     private GameMode _gameMode;
@@ -20,12 +17,11 @@ public class GameplayCycle : IDisposable
     private StayAliveTimer _timer;
     private ConditionsFactory _conditionsFactory;
     private GameRules _gameRules;
+    private PlayerProvider _playerProvider;
     private List<Coroutine> _spawnCoroutines = new List<Coroutine>();
 
     public GameplayCycle(
-        MainHeroFactory mainHeroFactory, 
         LevelConfig levelConfig, 
-        KeyboardInput keyboardInput, 
         ConfirmPopup confirmPopup, 
         KeyCode keyToContinue, 
         EnemiesSpawner enemiesSpawner, 
@@ -35,11 +31,10 @@ public class GameplayCycle : IDisposable
         StayAliveTimerView stayAliveTimerView,
         StayAliveTimer timer,
         ConditionsFactory conditionsFactory,
-        GameRules gameRules)
+        GameRules gameRules,
+        PlayerProvider playerProvider)
     {
-        _mainHeroFactory = mainHeroFactory;
         _levelConfig = levelConfig;
-        _keyboardInput = keyboardInput;
         _confirmPopup = confirmPopup;
         _keyToContinue = keyToContinue;
         _enemiesSpawner = enemiesSpawner;
@@ -50,11 +45,12 @@ public class GameplayCycle : IDisposable
         _timer = timer;
         _conditionsFactory = conditionsFactory;
         _gameRules = gameRules;
+        _playerProvider = playerProvider;
     }
 
     public void Prepare()
     {
-        _mainHero = _mainHeroFactory.Create(_levelConfig.MainHeroConfig, _levelConfig.MainHeroSpawnPoint, _keyboardInput);
+        _playerProvider.Create(_levelConfig.MainHeroConfig, _levelConfig.MainHeroSpawnPoint);
     }
 
     public IEnumerator Launch()
@@ -66,13 +62,13 @@ public class GameplayCycle : IDisposable
 
         _confirmPopup.Hide();
 
-        _gameRules.SetRules(_levelConfig, _mainHero, _stayAliveTimerView, _timer);
+        _gameRules.SetRules(_levelConfig, _stayAliveTimerView, _timer);
 
         IGameCondition winCondition = _conditionsFactory.CreateWinCondition(
             _levelConfig.WinConditionType, _levelConfig, _enemiesList, _timer);
 
         IGameCondition loseCondition = _conditionsFactory.CreateLoseCondition(
-            _levelConfig.LoseConditionType, _levelConfig, _mainHero, _enemiesList);
+            _levelConfig.LoseConditionType, _levelConfig, _enemiesList);
 
         _gameMode = new GameMode(winCondition, loseCondition);
 
@@ -134,7 +130,7 @@ public class GameplayCycle : IDisposable
         CleanupEnemies();
         _stayAliveTimerView?.Hide();
 
-        _mainHero.Destroy();
+        _playerProvider.DestroyHero();
         Prepare();
 
         _coroutineRunner.StartCoroutine(Launch());
