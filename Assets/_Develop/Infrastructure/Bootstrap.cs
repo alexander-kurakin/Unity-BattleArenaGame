@@ -41,7 +41,7 @@ public class Bootstrap : MonoBehaviour
         BulletFactory bulletFactory = new BulletFactory(_bulletPrefab);
 
         EnemiesFactory enemiesFactory = new EnemiesFactory(_controllersUpdateService, controllersFactory, charactersFactory);
-        MainHeroFactory mainHeroFactory = new MainHeroFactory(_controllersUpdateService, controllersFactory, charactersFactory, bulletFactory);
+        MainHeroFactory mainHeroFactory = new MainHeroFactory(_controllersUpdateService, controllersFactory, charactersFactory, bulletFactory, _keyboardInput);
 
         ReactiveList<SimpleCharacter> enemiesList = new ReactiveList<SimpleCharacter>();
 
@@ -50,23 +50,21 @@ public class Bootstrap : MonoBehaviour
         LevelConfig levelConfig = levelsListConfig.GetRandom();
 
         StayAliveTimer stayAliveTimer = new StayAliveTimer();
-        PlayerProvider playerProvider = new PlayerProvider(mainHeroFactory, _keyboardInput);
-        ConditionsFactory conditionsFactory = new ConditionsFactory(playerProvider);
-        GameRules gameRules = new GameRules(playerProvider);
+        PlayerProvider playerProvider = new PlayerProvider(mainHeroFactory);
+        ConditionsFactory conditionsFactory = new ConditionsFactory(playerProvider, levelConfig, enemiesList, stayAliveTimer);
+        GameRules gameRules = new GameRules(playerProvider, levelConfig, _stayAliveTimerView, stayAliveTimer);
+        EnemiesController enemiesController = new EnemiesController(enemiesSpawner, enemiesList, _enemySpawnPoints, this, levelConfig);
 
         _gameplayCycle = new GameplayCycle(
             levelConfig,
             _confirmPopup,
             _keyToContinue,
-            enemiesSpawner,
-            _enemySpawnPoints,
-            enemiesList,
             this,
-            _stayAliveTimerView,
-            stayAliveTimer,
             conditionsFactory,
             gameRules,
-            playerProvider);
+            playerProvider,
+            mainHeroFactory,
+            enemiesController);
             
         yield return new WaitForSeconds(1.5f);
 

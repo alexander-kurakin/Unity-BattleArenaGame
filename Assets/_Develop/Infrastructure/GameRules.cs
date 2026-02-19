@@ -1,25 +1,37 @@
 public class GameRules
 {
     private PlayerProvider _playerProvider;
+    private LevelConfig _levelConfig;
+    private StayAliveTimerView _stayAliveTimerView;
+    private StayAliveTimer _timer;
 
-    public GameRules(PlayerProvider playerProvider)
-    {
-        _playerProvider = playerProvider;
-    }
-
-    public void SetRules(
+    public GameRules(
+        PlayerProvider playerProvider,
         LevelConfig levelConfig,
-        StayAliveTimerView timerView,
+        StayAliveTimerView stayAliveTimerView,
         StayAliveTimer timer)
     {
-        bool isTimerNeeded = levelConfig.WinConditionType == WinConditionType.StayAliveEnoughSeconds;
+        _playerProvider = playerProvider;
+        _levelConfig = levelConfig;
+        _stayAliveTimerView = stayAliveTimerView;
+        _timer = timer;
+    }
+
+    public void Cleanup()
+    {
+        _stayAliveTimerView?.Hide();
+    }
+
+    public void SetRules()
+    {
+        bool isTimerNeeded = _levelConfig.WinConditionType == WinConditionType.StayAliveEnoughSeconds;
 
         if (isTimerNeeded)
-            timerView?.Init(timer);
+            _stayAliveTimerView?.Init(_timer);
         else
-            timerView?.Hide();
+            _stayAliveTimerView?.Hide();
 
-        bool canHeroBeDamaged = levelConfig.LoseConditionType == LoseConditionType.PlayerDied;
+        bool canHeroBeDamaged = _levelConfig.LoseConditionType == LoseConditionType.PlayerDied;
         _playerProvider.MainHero.SetCanBeDamaged(canHeroBeDamaged);
     }
 }

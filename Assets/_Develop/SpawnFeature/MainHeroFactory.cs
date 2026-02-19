@@ -1,29 +1,33 @@
+using System;
 using Cinemachine;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class MainHeroFactory 
 {
+    public event Action<SimpleCharacter> Created;
+
     private ControllersUpdateService _controllersUpdateService;
     private ControllersFactory _controllersFactory;
     private CharactersFactory _charactersFactory;
     private BulletFactory _bulletFactory;
+    private KeyboardInput _keyboardInput;
 
     public MainHeroFactory(
         ControllersUpdateService controllersUpdateService,
         ControllersFactory controllersFactory,
         CharactersFactory charactersFactory,
-        BulletFactory bulletFactory)
+        BulletFactory bulletFactory,
+        KeyboardInput keyboardInput)
     {
         _controllersUpdateService = controllersUpdateService;
         _controllersFactory = controllersFactory;
         _charactersFactory = charactersFactory;
         _bulletFactory = bulletFactory;
+        _keyboardInput = keyboardInput;
     }
 
-    public SimpleCharacter Create(
-        MainHeroConfig config, 
-        Vector3 spawnPosition, 
-        KeyboardInput keyboardInput) 
+    public SimpleCharacter Create(MainHeroConfig config, Vector3 spawnPosition) 
     {
         SimpleCharacter instance = _charactersFactory.CreateCharacter(
             config.prefab, 
@@ -47,10 +51,12 @@ public class MainHeroFactory
 
         followCamera.Follow = instance.CameraTarget;
 
-        Controller controller = _controllersFactory.CreateMainHeroPlayerController(instance, keyboardInput);
+        Controller controller = _controllersFactory.CreateMainHeroPlayerController(instance, _keyboardInput);
 
         controller.Enable();
         _controllersUpdateService.Add(controller, () => instance.IsDestroyed);
+
+        Created?.Invoke(instance);
 
         return instance;
     }

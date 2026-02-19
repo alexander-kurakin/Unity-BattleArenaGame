@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameplayCycle : IDisposable
@@ -9,48 +8,38 @@ public class GameplayCycle : IDisposable
     private ConfirmPopup _confirmPopup;
     private KeyCode _keyToContinue;
     private GameMode _gameMode;
-    private EnemiesSpawner _enemiesSpawner;
-    private Transform[] _enemySpawnPoints;
-    private ReactiveList<SimpleCharacter> _enemiesList;
     private MonoBehaviour _coroutineRunner;
-    private StayAliveTimerView _stayAliveTimerView;
-    private StayAliveTimer _timer;
     private ConditionsFactory _conditionsFactory;
     private GameRules _gameRules;
     private PlayerProvider _playerProvider;
-    private List<Coroutine> _spawnCoroutines = new List<Coroutine>();
+    private MainHeroFactory _mainHeroFactory;
+    private EnemiesController _enemiesController;
 
     public GameplayCycle(
         LevelConfig levelConfig, 
         ConfirmPopup confirmPopup, 
         KeyCode keyToContinue, 
-        EnemiesSpawner enemiesSpawner, 
-        Transform[] enemySpawnPoints, 
-        ReactiveList<SimpleCharacter> enemiesList, 
         MonoBehaviour coroutineRunner,
-        StayAliveTimerView stayAliveTimerView,
-        StayAliveTimer timer,
         ConditionsFactory conditionsFactory,
         GameRules gameRules,
-        PlayerProvider playerProvider)
+        PlayerProvider playerProvider,
+        MainHeroFactory mainHeroFactory,
+        EnemiesController enemiesController)
     {
         _levelConfig = levelConfig;
         _confirmPopup = confirmPopup;
         _keyToContinue = keyToContinue;
-        _enemiesSpawner = enemiesSpawner;
-        _enemySpawnPoints = enemySpawnPoints;
-        _enemiesList = enemiesList;
         _coroutineRunner = coroutineRunner;
-        _stayAliveTimerView = stayAliveTimerView;
-        _timer = timer;
         _conditionsFactory = conditionsFactory;
         _gameRules = gameRules;
         _playerProvider = playerProvider;
+        _mainHeroFactory = mainHeroFactory;
+        _enemiesController = enemiesController;
     }
 
     public void Prepare()
     {
-        _playerProvider.Create(_levelConfig.MainHeroConfig, _levelConfig.MainHeroSpawnPoint);
+        _mainHeroFactory.Create(_levelConfig.MainHeroConfig, _levelConfig.MainHeroSpawnPoint);
     }
 
     public IEnumerator Launch()
@@ -62,13 +51,10 @@ public class GameplayCycle : IDisposable
 
         _confirmPopup.Hide();
 
-        _gameRules.SetRules(_levelConfig, _stayAliveTimerView, _timer);
+        _gameRules.SetRules();
 
-        IGameCondition winCondition = _conditionsFactory.CreateWinCondition(
-            _levelConfig.WinConditionType, _levelConfig, _enemiesList, _timer);
-
-        IGameCondition loseCondition = _conditionsFactory.CreateLoseCondition(
-            _levelConfig.LoseConditionType, _levelConfig, _enemiesList);
+        IGameCondition winCondition = _conditionsFactory.CreateWinCondition(_levelConfig.WinConditionType);
+        IGameCondition loseCondition = _conditionsFactory.CreateLoseCondition(_levelConfig.LoseConditionType);
 
         _gameMode = new GameMode(winCondition, loseCondition);
 
@@ -77,7 +63,7 @@ public class GameplayCycle : IDisposable
 
         _gameMode.Start();
 
-        SpawnEnemies();
+        _enemiesController.StartSpawning(_gameMode);
     }
 
     public void Update(float deltaTime) => _gameMode?.Update(deltaTime);
@@ -91,45 +77,10 @@ public class GameplayCycle : IDisposable
         }
     }
 
-    private void SpawnEnemies()
-    {
-        foreach (Transform spawnPoint in _enemySpawnPoints)
-        {
-            Coroutine spawnCoroutine = _coroutineRunner.StartCoroutine(_enemiesSpawner.Spawn(
-                _levelConfig.EnemyConfig,
-                spawnPoint,
-                _levelConfig.EnemySpawnRadius,
-                _levelConfig.EnemySpawnTimer,
-                () => _gameMode != null && _gameMode.IsRunning
-            ));
-
-            _spawnCoroutines.Add(spawnCoroutine);
-        }
-    }
-
-    private void StopSpawning()
-    {
-        foreach (Coroutine coroutine in _spawnCoroutines)
-            _coroutineRunner.StopCoroutine(coroutine);
-
-        _spawnCoroutines.Clear();
-    }
-
-    private void CleanupEnemies()
-    {
-        foreach (SimpleCharacter enemy in _enemiesList)
-            enemy.Destroy();
-
-        _enemiesList.Clear();
-    }
-
     private void Restart()
     {
         Dispose();
-        StopSpawning();
-        CleanupEnemies();
-        _stayAliveTimerView?.Hide();
-
+        _gameRules.Cleanup();
         _playerProvider.DestroyHero();
         Prepare();
 
